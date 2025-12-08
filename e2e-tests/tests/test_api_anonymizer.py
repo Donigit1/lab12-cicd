@@ -417,3 +417,16 @@ def test_given_anonymize_called_with_valid_replacement_then_expected_valid_respo
 
     assert status == 200
     assert "ANONYMIZED" in response["text"]
+
+def test_given_anonymize_called_with_genz_then_expected_valid_response_returned():
+    request_body = {
+        "text": "Please contact Emily Carter at 734-555-9284 if you have questions",
+        "analyzer_results": [
+            {"start": 15, "end": 27, "score": 0.3, "entity_type": "PERSON"},
+            {"start": 31, "end": 43, "score": 0.95, "entity_type": "PHONE_NUMBER"},
+        ]
+    }
+
+    response_status, response_content = genz(request_body)
+
+    assert response_status == 200
