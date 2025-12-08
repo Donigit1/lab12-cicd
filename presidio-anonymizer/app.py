@@ -138,11 +138,11 @@ class Server:
             self.logger.error(f"A fatal error occurred during execution: {e}")
             return jsonify(error="Internal server error"), 500
 
-def create_app(): # noqa
+def create_app():
     server = Server()
     return server.app
 
 if __name__ == "__main__":
-    app = create_app()
-    port = int(os.environ.get("PORT", DEFAULT_PORT))
-    app.run(host="0.0.0.0", port=port)
+    server = Server()
+    server.app.run(host="0.0.0.0", port=3000)
+
