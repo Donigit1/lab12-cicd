@@ -139,8 +139,10 @@ class Server:
             return jsonify(error="Internal server error"), 500
 
 def create_app():
+    """Create function used by gunicorn to create the Flask app."""
     server = Server()
     return server.app
+
 
 if __name__ == "__main__":
     server = Server()
