@@ -9,7 +9,6 @@ from flask import Flask, Response, jsonify, request
 from presidio_anonymizer import AnonymizerEngine, DeanonymizeEngine
 from presidio_anonymizer.entities import InvalidParamError
 from presidio_anonymizer.services.app_entities_convertor import AppEntitiesConvertor
-from presidio_anonymizer.services.custom_operators import GenZOperator
 from werkzeug.exceptions import BadRequest, HTTPException
 
 DEFAULT_PORT = "3000"
@@ -106,6 +105,7 @@ class Server:
 
         # Gen-Z anonymizer route
         @self.app.route("/genz", methods=["POST"])
+        @self.app.route("/genz", methods=["POST"])
         def genz_anonymize():
             content = request.get_json()
             if not content:
@@ -114,13 +114,17 @@ class Server:
             analyzer_results = AppEntitiesConvertor.analyzer_results_from_json(
                 content.get("analyzer_results")
             )
-            operator = {"genz": GenZOperator()}
+
+            operators = {"DEFAULT": {"type": "genz"}}
+
             result = self.anonymizer.anonymize(
                 text=content.get("text", ""),
                 analyzer_results=analyzer_results,
-                operators=operator
+                operators=operators
             )
+
             return Response(result.to_json(), mimetype="application/json")
+
 
         @self.app.errorhandler(InvalidParamError)
         def invalid_param(err):
