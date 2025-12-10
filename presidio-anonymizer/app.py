@@ -105,25 +105,29 @@ class Server:
 
         # Gen-Z anonymizer route
         @self.app.route("/genz", methods=["POST"])
-        @self.app.route("/genz", methods=["POST"])
         def genz_anonymize():
             content = request.get_json()
             if not content:
                 raise BadRequest("Invalid request json")
 
+            # Built-in converter handles the right format
             analyzer_results = AppEntitiesConvertor.analyzer_results_from_json(
                 content.get("analyzer_results")
-            )
+    )
 
-            operators = {"DEFAULT": {"type": "genz"}}
+            # HERE is the important fix:
+            # Use AppEntitiesConvertor to make operator config correctly
+            anonymizers_config = AppEntitiesConvertor.operators_config_from_json(
+                {"DEFAULT": {"type": "genz"}}
+            )
 
             result = self.anonymizer.anonymize(
                 text=content.get("text", ""),
                 analyzer_results=analyzer_results,
-                operators=operators
+                operators=anonymizers_config,
             )
-
             return Response(result.to_json(), mimetype="application/json")
+
 
 
         @self.app.errorhandler(InvalidParamError)
