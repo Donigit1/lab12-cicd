@@ -6,6 +6,8 @@ from common.assertions import equal_json_strings
 from common.methods import anonymize, anonymizers, deanonymize, genz
 
 
+from common.methods import anonymize, anonymizers, deanonymize
+from common.methods import call_anonymize_endpoint
 
 @pytest.mark.api
 def test_given_anonymize_called_with_valid_request_then_expected_valid_response_returned():
@@ -414,3 +416,18 @@ def test_given_anonymize_called_with_genz_then_expected_valid_response_returned(
     response_status, response = genz(request_body)
     assert response_status == 200
 
+def test_given_anonymize_called_with_valid_replacement_then_expected_valid_response_returned():
+    request_body = {
+        "text": "My name is John Doe",
+        "anonymizers": {
+            "DEFAULT": {"type": "replace", "new_value": "ANONYMIZED"}
+        },
+        "analyzer_results": [
+            {"start": 11, "end": 19, "score": 1.0, "entity_type": "NAME"}
+        ]
+    }
+
+    status, response = call_anonymize_endpoint(request_body)
+
+    assert status == 200
+    assert "ANONYMIZED" in response["text"]
