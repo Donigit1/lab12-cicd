@@ -49,13 +49,14 @@ def __get_multipart_form_data(file):
         }
     return multipart_form_data
 
+
 def genz(request_body):
     from common.constants import ANONYMIZER_BASE_URL
-
     import requests
+
     url = f"{ANONYMIZER_BASE_URL}/genz"
     r = requests.post(url, json=request_body)
     try:
         return r.status_code, r.json()
     except Exception:
-        return r.status_code, {}
+        return r.status_code, r.text
