@@ -19,7 +19,6 @@ from presidio_anonymizer.operators import (
 )
 from presidio_anonymizer.operators.genz import GenZ
 
-
 logger = logging.getLogger("presidio-anonymizer")
 
 # Predefined operators
