@@ -1,0 +1,35 @@
+[33m3e8144c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfix-codegrade[m[33m, [m[1;31morigin/fix-codegrade[m[33m)[m HEAD@{0}: commit: Reverted last 3 commits and cleaned branch
+[33m182261f[m HEAD@{1}: reset: moving to HEAD~3
+[33m201a02e[m HEAD@{2}: reset: moving to HEAD~3
+[33mfb22080[m HEAD@{3}: checkout: moving from fix-codegrade to fix-codegrade
+[33mfb22080[m HEAD@{4}: commit: Add missing genz function for CodeGrade
+[33m43035ec[m HEAD@{5}: commit: Fix: CodeGrade genz client method
+[33mad3dcbe[m HEAD@{6}: commit: Final working GenZ endpoint
+[33m201a02e[m HEAD@{7}: commit: Fix: added BadRequest import
+[33m41013ea[m HEAD@{8}: commit: Fix: added HTTPException import and resolved GenZ endpoint errors
+[33m0b82e17[m HEAD@{9}: commit: Fixed linting
+[33m182261f[m HEAD@{10}: commit: Fixed GenZ operator import for CodeGrade
+[33m547ce76[m HEAD@{11}: commit: Added required genz function for CodeGrade
+[33m3f407b2[m HEAD@{12}: commit: Fix lint errors (ruff newline fixes)
+[33mdfe17ff[m HEAD@{13}: commit: Fixed GenZ operator, updated app.py and methods for working tests
+[33m6715765[m HEAD@{14}: pull --rebase origin fix-codegrade (finish): returning to refs/heads/fix-codegrade
+[33m6715765[m HEAD@{15}: pull --rebase origin fix-codegrade (pick): Fix genz helper to POST json body
+[33mcb997fd[m HEAD@{16}: pull --rebase origin fix-codegrade (start): checkout cb997fd3e2da1438e40692252a6c8eff8de4f233
+[33m14654de[m HEAD@{17}: commit: Fix genz helper to POST json body
+[33mee369b6[m HEAD@{18}: commit: Fix import of genz for E2E test
+[33mddabe16[m HEAD@{19}: commit: Fix merge conflict in methods.py
+[33m794c057[m HEAD@{20}: commit: Add genz helper & test
+[33m9546ea2[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{21}: checkout: moving from main to fix-codegrade
+[33m9546ea2[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{22}: checkout: moving from add-genz-endpoint to main
+[33md1c35fc[m HEAD@{23}: commit: Fix genz route to use operators_config_from_json
+[33m329243a[m HEAD@{24}: commit: Fix genz endpoint to use built-in operator
+[33mce3eafd[m HEAD@{25}: commit: Fix genz endpoint to use built-in operator
+[33m2d81b97[m HEAD@{26}: commit: Fix create_app docstring
+[33m96908ac[m HEAD@{27}: checkout: moving from genz-endpoint to add-genz-endpoint
+[33m96908ac[m HEAD@{28}: commit: Fix create_app + genz methods + test
+[33m3b3c3b0[m HEAD@{29}: commit: Edited the app.py file at the end
+[33mf7b8247[m HEAD@{30}: commit: Fixed the linting
+[33m21941b8[m HEAD@{31}: commit: Changes to output
+[33m6198741[m HEAD@{32}: commit: Add /genz-preview endpoint
+[33m9546ea2[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{33}: checkout: moving from main to genz-endpoint
+[33m9546ea2[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{34}: clone: from github.com:Donigit1/lab12-cicd.git

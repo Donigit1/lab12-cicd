@@ -1,41 +1,42 @@
-import os
+import base64
 import json
+import os
 import requests
-from common.constants import ANONYMIZER_BASE_URL as DEFAULT_BASE_URL
 
-# Read base URL from environment variable or fallback to default
-ANONYMIZER_BASE_URL = os.environ.get("ANONYMIZER_BASE_URL", DEFAULT_BASE_URL)
+from common.constants import ANONYMIZER_BASE_URL
 
 DEFAULT_HEADERS = {"Content-Type": "application/json"}
 MULTIPART_HEADERS = {"Content-Type": "multipart/form-data"}
 
-def call_anonymize_endpoint(request_body):
-    response = requests.post(
-        f"{ANONYMIZER_BASE_URL}/anonymize",
-        json=request_body
-    )
-    return response.status_code, response.json()
+# DO NOT overwrite ANONYMIZER_BASE_URL incorrectly
+BASE_URL = os.environ.get("ANONYMIZER_BASE_URL", ANONYMIZER_BASE_URL)
+
 
 def anonymize(data):
-    """Send data to /anonymize endpoint."""
     response = requests.post(
-        f"{ANONYMIZER_BASE_URL}/anonymize", data=data, headers=DEFAULT_HEADERS
+        f"{BASE_URL}/anonymize", data=data, headers=DEFAULT_HEADERS
+    )
+    return response.status_code, response.content
+
+
+def genz(data):
+    """Call the /genz endpoint."""
+    response = requests.post(
+        f"{BASE_URL}/genz", data=data, headers=DEFAULT_HEADERS
     )
     return response.status_code, response.content
 
 
 def anonymizers():
-    """Get list of available anonymizers."""
     response = requests.get(
-        f"{ANONYMIZER_BASE_URL}/anonymizers", headers=DEFAULT_HEADERS
+        f"{BASE_URL}/anonymizers", headers=DEFAULT_HEADERS
     )
     return response.status_code, response.content
 
 
 def deanonymize(data):
-    """Send data to /deanonymize endpoint."""
     response = requests.post(
-        f"{ANONYMIZER_BASE_URL}/deanonymize", data=data, headers=DEFAULT_HEADERS
+        f"{BASE_URL}/deanonymize", data=data, headers=DEFAULT_HEADERS
     )
     return response.status_code, response.content
 
@@ -43,7 +44,7 @@ def deanonymize(data):
 def __get_redact_payload(color_fill):
     payload = {}
     if color_fill:
-        payload = {"data": json.dumps({"color_fill": color_fill})}
+        payload = {"data": "{'color_fill':'" + str(color_fill) + "'}"}
     return payload
 
 
