@@ -1,44 +1,45 @@
 import base64
 import json
 import os
-
 import requests
 
-from common.constants import (
-    ANONYMIZER_BASE_URL,
-)
+from common.constants import ANONYMIZER_BASE_URL
 
 DEFAULT_HEADERS = {"Content-Type": "application/json"}
 MULTIPART_HEADERS = {"Content-Type": "multipart/form-data"}
-ANONYMIZER_BASE_URL = os.environ.get("ANONYMIZER_BASE_URL", ANONYMIZER_BASE_URL)
+
+# DO NOT overwrite ANONYMIZER_BASE_URL incorrectly
+BASE_URL = os.environ.get("ANONYMIZER_BASE_URL", ANONYMIZER_BASE_URL)
 
 
 def anonymize(data):
     response = requests.post(
-        f"{ANONYMIZER_BASE_URL}/anonymize", data=data, headers=DEFAULT_HEADERS
+        f"{BASE_URL}/anonymize", data=data, headers=DEFAULT_HEADERS
     )
     return response.status_code, response.content
 
 
 def genz(data):
+    """Call the /genz endpoint."""
     response = requests.post(
-        f"{ANONYMIZER_BASE_URL}/genz", data=data, headers=DEFAULT_HEADERS
+        f"{BASE_URL}/genz", data=data, headers=DEFAULT_HEADERS
     )
     return response.status_code, response.content
+
 
 def anonymizers():
     response = requests.get(
-        f"{ANONYMIZER_BASE_URL}/anonymizers", headers=DEFAULT_HEADERS
+        f"{BASE_URL}/anonymizers", headers=DEFAULT_HEADERS
     )
     return response.status_code, response.content
-
 
 
 def deanonymize(data):
     response = requests.post(
-        f"{ANONYMIZER_BASE_URL}/deanonymize", data=data, headers=DEFAULT_HEADERS
+        f"{BASE_URL}/deanonymize", data=data, headers=DEFAULT_HEADERS
     )
     return response.status_code, response.content
+
 
 def __get_redact_payload(color_fill):
     payload = {}
@@ -54,9 +55,3 @@ def __get_multipart_form_data(file):
             "image": (file.name, file, "multipart/form-data"),
         }
     return multipart_form_data
-
-def genz(data):
-    response = requests.post(
-        f"{ANONYMIZER_BASE_URL}/genz", data=data, headers=DEFAULT_HEADERS
-    )
-    return response.status_code, response.content

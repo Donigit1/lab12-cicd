@@ -9,7 +9,6 @@ from presidio_anonymizer.operators import (
     DeanonymizeKeep,
     Decrypt,
     Encrypt,
-    GenZ,
     Hash,
     Keep,
     Mask,
@@ -18,6 +17,8 @@ from presidio_anonymizer.operators import (
     Redact,
     Replace,
 )
+from presidio_anonymizer.operators.genz import GenZ
+
 
 logger = logging.getLogger("presidio-anonymizer")
 
