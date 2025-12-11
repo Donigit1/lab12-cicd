@@ -9,6 +9,7 @@ from flask import Flask, Response, jsonify, request
 from presidio_anonymizer import AnonymizerEngine, DeanonymizeEngine
 from presidio_anonymizer.entities import InvalidParamError
 from presidio_anonymizer.entities.engine.operator_config import OperatorConfig
+from presidio_anonymizer.operators.genz import GenZ
 from presidio_anonymizer.services.app_entities_convertor import AppEntitiesConvertor
 from werkzeug.exceptions import BadRequest, HTTPException
 
@@ -124,50 +125,34 @@ class Server:
         # ----------------------------
         @self.app.route("/genz", methods=["POST"])
         def genz():
-            """
-            Apply Gen-Z anonymizer to the given text.
-            """
+            """Apply Gen-Z anonymizer to the given text."""
 
             content = request.get_json()
             if not content:
                 raise BadRequest("Invalid request json")
 
-            # Convert analyzer results
             analyzer_results = AppEntitiesConvertor.analyzer_results_from_json(
                 content.get("analyzer_results")
             )
 
             text = content.get("text", "")
 
-            # REGISTER GENZ OPERATOR (CodeGrade requires this)
+            # REGISTER GENZ OPERATOR
             self.anonymizer.add_anonymizer(GenZ)
 
-            # Operator config using "genz"
             operator_config = {"DEFAULT": OperatorConfig("genz")}
 
-            # Run anonymization
             result = self.anonymizer.anonymize(
                 text=text,
                 analyzer_results=analyzer_results,
                 operators=operator_config,
             )
 
-            # Build CodeGrade-required JSON format
-            response_json = {
-                "text": result.text,
-                "items": [
-                    {
-                        "entity_type": item.entity_type,
-                        "operator": item.operator,
-                        "start": item.start,
-                        "end": item.end,
-                    }
-                    for item in result.items
-                ],
-                "operator": "genz"
-            }
+            return Response(
+                result.to_json(),
+                mimetype="application/json",
+            )
 
-            return Response(json.dumps(response_json), mimetype="application/json")
 
 
         @self.app.errorhandler(InvalidParamError)
