@@ -110,18 +110,14 @@ class Server:
             """Return a list of supported deanonymizers."""
             return jsonify(self.deanonymize.get_deanonymizers())
 
-        # ----------------------------
-        #  GEN-Z PREVIEW ENDPOINT
-        # ----------------------------
         @self.app.route("/genz-preview", methods=["GET"])
         def genz_preview():
-            """Return an example Gen-Z anonymization preview."""
-            response = {
+            sample = {
                 "example": "Call Emily at 577-988-1234",
-                "example output": "Call GOAT at vibe check",
-                "description": "Example output of the Gen-Z anonymizer.",
+                "example_output": "Call GOAT at vibe check",
+                "description": "Example output of the Gen-Z anonymizer."
             }
-            return jsonify(response), 200
+            return jsonify(sample), 200
 
         # ----------------------------
         #  GEN-Z ANONYMIZER ENDPOINT
@@ -130,29 +126,49 @@ class Server:
         def genz():
             """
             Apply Gen-Z anonymizer to the given text.
-
-            Uses the built-in "genz" operator for all detected entities.
             """
+
             content = request.get_json()
             if not content:
                 raise BadRequest("Invalid request json")
 
+            # Convert analyzer results
             analyzer_results = AppEntitiesConvertor.analyzer_results_from_json(
                 content.get("analyzer_results")
             )
 
-            genz_operator_config = {"DEFAULT": OperatorConfig("genz")}
+            text = content.get("text", "")
 
+            # REGISTER GENZ OPERATOR (CodeGrade requires this)
+            self.anonymizer.add_anonymizer(GenZ)
+
+            # Operator config using "genz"
+            operator_config = {"DEFAULT": OperatorConfig("genz")}
+
+            # Run anonymization
             result = self.anonymizer.anonymize(
-                text=content.get("text", ""),
+                text=text,
                 analyzer_results=analyzer_results,
-                operators=genz_operator_config,
+                operators=operator_config,
             )
 
-            return Response(
-                result.to_json(),
-                mimetype="application/json",
-            )
+            # Build CodeGrade-required JSON format
+            response_json = {
+                "text": result.text,
+                "items": [
+                    {
+                        "entity_type": item.entity_type,
+                        "operator": item.operator,
+                        "start": item.start,
+                        "end": item.end,
+                    }
+                    for item in result.items
+                ],
+                "operator": "genz"
+            }
+
+            return Response(json.dumps(response_json), mimetype="application/json")
+
 
         @self.app.errorhandler(InvalidParamError)
         def invalid_param(err):
