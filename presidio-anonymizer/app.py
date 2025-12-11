@@ -115,7 +115,7 @@ class Server:
         def genz_preview():
             sample = {
                 "example": "Call Emily at 577-988-1234",
-                "example_output": "Call GOAT at vibe check",
+                "example output": "Call GOAT at vibe check",
                 "description": "Example output of the Gen-Z anonymizer."
             }
             return jsonify(sample), 200
